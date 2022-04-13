@@ -71,6 +71,7 @@ nav ul li ion-icon {
 }
 
 .chat {
+    display: flex;
     margin-top: calc(80px + 26px);
     margin-bottom: calc(80px + 60px);
 }
@@ -99,32 +100,31 @@ nav ul li ion-icon {
     background-color: blue;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.cinza {background-color: #DCDCDC;}
-.rosa {
-    background-color: #FFDEDE;
-    height: 63px;
+.texto {
+    margin-left: 2.5px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.message {background-color: #fff;}
+.status {background-color: #DCDCDC;}
+.private_message { background-color: #FFDEDE; height: 63px;}

@@ -1,20 +1,12 @@
+
 let inputText = document.querySelector("#escreva-aqui"); //.value pega o texto digitado
 let chat = document.querySelector(".chat");
-let ultimaMensagem = document.querySelector(".mensagem:last-child");
+let ultimaMensagem;
 let perguntarNome;
 
 perguntarUser();
-// setInterval(checarUsuarioOnline, 5000);
-buscarMensagens();
-function enviarMensagem() {
-    
-    ultimaMensagem.scrollIntoView(); //Scrolla para ultima mensagem
+//setInterval(checarUsuarioOnline, 5000);
 
-    chat.innerHTML += `<div class="mensagem">
-    <p><span class="horario">(09:22:10) </span><strong>${perguntarNome}</strong> para <strong>Todos</strong>: ${inputText.value}</p>
-</div>
-`   
-}
 function perguntarUser() {
     perguntarNome = prompt("Qual o seu usuário?");
     let nome = {
@@ -26,14 +18,71 @@ function perguntarUser() {
     promise.catch(usuarioInvalido);
 
 }
+function buscarMensagens(){
+    let promessa = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
+    
+    promessa.then(function(resposta) {
+    let mensagemServidor = resposta.data;
+    
+    
+    for(let i = 0; i < mensagemServidor.length; i++) {
+    if (mensagemServidor[i].type === 'status') {
+        chat.innerHTML += 
+    `<div class="mensagem ${mensagemServidor[i].type}">
+
+    <p><span class="horario">(${mensagemServidor[i].time})</span>
+
+    <strong class="nome">${mensagemServidor[i].from}</strong>
+    <span class="texto" style="margin-left:0;">${mensagemServidor[i].text}</span></p>
+
+</div>
+`
+    } else {
+    chat.innerHTML += 
+    `<div class="mensagem ${mensagemServidor[i].type}">
+
+    <p><span class="horario">(${mensagemServidor[i].time})</span>
+
+    <strong class="nome">${mensagemServidor[i].from}</strong> 
+
+    para 
+
+    <strong class="to">${mensagemServidor[i].to}</strong>:
+
+    <span class="texto">${mensagemServidor[i].text}</span></p>
+
+</div>
+`
+}
+
+}
+    ultimaMensagem = document.querySelectorAll(".mensagem");
+    ultimaMensagem[ultimaMensagem.length - 1].scrollIntoView();
+   })
+
+   promessa.catch(function(){alert("n funfou");})
+
+}
+function enviarMensagemPost() {
+
+    let mensagemUsuario = {
+        from: perguntarNome,
+        to: "Todos",
+        text: inputText.value,
+        type: "message"
+    }
+
+    let promessa = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagemUsuario);
+    promessa.then(buscarMensagens);
+}
+
 function checarUsuarioOnline() {
     let promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", perguntarNome);
-    promise.then(function(){alert("user on")})
-    promise.catch(function(){alert("user off")})
 
 }
 function usuarioValido() {
-    alert("Bem vindo ao bate papo Uol");
+    console.log("login realizado com sucesso");
+    buscarMensagens();
 }
 function usuarioInvalido(error) {
     if (error.response.status === 400) {
@@ -41,14 +90,4 @@ function usuarioInvalido(error) {
         perguntarUser();
     }
 }
-function buscarMensagens(response){
-    let promessa = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
-
-   promessa.then(function() {
-       console.log(promessa);
-   })
-   promessa.catch(function(){
-       alert("n funfou");
-   })
-}
-
+setInterval(buscarMensagens,3000);
