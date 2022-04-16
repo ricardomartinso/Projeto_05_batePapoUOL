@@ -11,47 +11,59 @@
 </head>
 <body>
     <div class="container">
-        <!--Navbar do topo-->
-        <nav>
-            <ul>
-                <li><img src="./assets/logoBatePapoUol.png" alt=""></li>
-                <li><ion-icon name="people"></ion-icon></li>
-            </ul>
-        </nav>
-        <!--Chat com mensagens-->
-        <div class="chat">
-            <div class="mensagem status">
-                <p><span class="horario">(09:22:10) </span><strong>João</strong> entra na sala...</p>
+
+        
+            <!--Navbar do topo-->
+            <nav>
+                <ul>
+                    <li><img src="./assets/logoBatePapoUol.png" alt=""></li>
+                    <li class="people" onclick="abrirSidebar()"><ion-icon name="people"></ion-icon></li>
+                </ul>
+            </nav>
+            <!--Chat com mensagens-->
+            <div class="chat">
+                <div class="mensagem status">
+                    <p><span class="horario">(09:22:10) </span><strong class="username">João</strong> entra na sala...</p>
+                </div>
+                <div class="mensagem message">
+                    <p><span class="horario">(09:23:10) </span><strong>João</strong> para <strong>Todos</strong>: <span class="texto">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique, reprehenderit nobis expedita ex distinctio porro. Consectetur iste, laudantium eius perferendis qui neque aliquam, cupiditate eveniet sed eligendi impedit eos earum.</span></p>
+                </div>
+                <div class="mensagem status">
+                    <p><span class="horario">(09:24:10) </span><strong>Maria</strong> entra na sala...</p>
+                </div>
+                <div class="mensagem private_message">
+                    <p><span class="horario">(09:25:10) </span><strong>João</strong> reservadamente para <strong>Maria</strong>: Oi gatinha quer tc?</p>
+                </div>
+                <div class="mensagem status">
+                    <p><span class="horario">(09:26:10)</span><strong>Maria</strong> sai da sala...</p>
+                </div>
             </div>
-            <div class="mensagem message">
-                <p><span class="horario">(09:23:10) </span><strong>João</strong> para <strong>Todos</strong>: Bom dia</p>
+
+            <!--Navbar de baixo-->
+            <footer>
+                <div class="navbar-bottom">
+                    <ul>
+                        <li><input type="text" name="escreva-aqui" id="escreva-aqui" placeholder="Escreva aqui..." maxlength="120" onfocus="this.value=''"></li>
+                        <li onclick="enviarMensagemPost(this)" onkeypress="enviarMensagemPost()"><ion-icon name="paper-plane-outline"></ion-icon></li>
+                    </ul>
+                </div>
+            </footer>
+        
+    </div>
+    <div class="sidebar hidden">
+        <div class="participantes-left" onclick="fecharSidebar()"></div>
+        <div class="participantes">
+            <h2>Escolha um contato para enviar mensagem:</h2>
+            <div class="usuarios">
+                <p onclick="selecionarUsuario(this)"><ion-icon name="person-circle" style="margin-right: 5px;"></ion-icon><span class="username">Todos</span></p>
             </div>
-            <div class="mensagem status">
-                <p><span class="horario">(09:24:10) </span><strong>Maria</strong> entra na sala...</p>
-            </div>
-            <div class="mensagem private_message">
-                <p><span class="horario">(09:25:10) </span><strong>João</strong> reservadamente para <strong>Maria</strong>: Oi gatinha quer tc?</p>
-            </div>
-            <div class="mensagem status">
-                <p><span class="horario">(09:26:10)</span><strong>Maria</strong> sai da sala...</p>
+            <h2>Escolha a visibilidade:</h2>
+            <div class="visibilidade">
+                <p><ion-icon name="lock-open"></ion-icon>Público</p>
+                <p><ion-icon name="lock-closed"></ion-icon>Reservadamente</p>
             </div>
         </div>
-
-        <!--Navbar de baixo-->
-        <footer>
-            <div class="navbar-bottom">
-                <ul>
-                    <li><input type="text" name="escreva-aqui" id="escreva-aqui" placeholder="Escreva aqui..." maxlength="120"></li>
-                    <li onclick="enviarMensagemPost(this)"><ion-icon name="paper-plane-outline"></ion-icon></li>
-                </ul>
-            </div>
-        </footer>
     </div>
-
-
-
-
-
 
 
     
