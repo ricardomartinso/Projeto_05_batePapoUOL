@@ -17,7 +17,7 @@ let sidebar = document.querySelector(".sidebar");
 perguntarUser();
 setInterval(checarUsuarioOnline, 4000);
 setInterval(buscarMensagens,5000);
-setInterval(buscarParticipantes,10000)
+setInterval(buscarParticipantes,10000);
 
 
 function perguntarUser() {
@@ -32,7 +32,7 @@ function perguntarUser() {
 
 }
 function buscarMensagens(){
-    console.log("atualizou");
+    console.log("atualizou as mensagens");
     let promessa = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
     promessa.then(function(resposta) {
     let mensagemServidor = resposta.data;
@@ -42,7 +42,7 @@ function buscarMensagens(){
     for(let i = 0; i < mensagemServidor.length; i++) {
     if (mensagemServidor[i].type === 'status') {
         chat.innerHTML += 
-    `<div class="mensagem ${mensagemServidor[i].type}">
+    `<div class="mensagem status">
 
     <p><span class="horario">(${mensagemServidor[i].time})</span>
 
@@ -51,9 +51,25 @@ function buscarMensagens(){
 
 </div>
 `
-    } else {
+    } else if (mensagemServidor[i].type === "message") {
     chat.innerHTML += 
-    `<div class="mensagem ${mensagemServidor[i].type}">
+    `<div class="mensagem message">
+
+    <p><span class="horario">(${mensagemServidor[i].time})</span>
+
+    <strong class="username" onclick="selecionarUsuarioMain(this)">${mensagemServidor[i].from}</strong> 
+
+    para 
+
+    <strong class="to">${mensagemServidor[i].to}</strong>:
+
+    <span class="texto">${mensagemServidor[i].text}</span></p>
+
+</div>
+`
+} else if (mensagemServidor[i].type === "private_message" && mensagemServidor[i].to === mensagemServidor[i].from) {
+    chat.innerHTML += 
+    `<div class="mensagem private_message">
 
     <p><span class="horario">(${mensagemServidor[i].time})</span>
 
@@ -80,8 +96,6 @@ function buscarMensagens(){
 }
 function enviarMensagemPost() {
 
-    
-
     if (mensagemUsuario.to === "Todos") {
         mensagemUsuario = {
             from: perguntarNome,
@@ -89,7 +103,14 @@ function enviarMensagemPost() {
             text: inputText.value,
             type: "message"
         }
-    } else if (mensagemUsuario.to !== "Todos") {
+    } else if (mensagemUsuario.to !== "Todos" && mensagemUsuario.to !== perguntarNome) {
+        mensagemUsuario = {
+            from: perguntarNome,
+            to: mensagemUsuario.to,
+            text: inputText.value,
+            type: "message"
+        }
+    } else if (mensagemUsuario.from === perguntarNome) {
         mensagemUsuario = {
             from: perguntarNome,
             to: mensagemUsuario.to,
@@ -97,7 +118,7 @@ function enviarMensagemPost() {
             type: "private_message"
         }
     }
-
+    inputText.value = "";
     let promessa = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagemUsuario);
     promessa.then(buscarMensagens);
     promessa.catch(function(){
@@ -109,7 +130,7 @@ function checarUsuarioOnline(response) {
     let promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", nome);
 }
 function usuarioValido() {
-    console.log("login realizado com sucesso");
+    console.log("Login efetuado com sucesso.");
     buscarMensagens();
     buscarParticipantes();
 }
@@ -120,19 +141,22 @@ function usuarioInvalido(error) {
     }
 }
 
-inputText.addEventListener("keyup", function(event) {
+inputText.addEventListener("keyup", digitarEnter);
+
+function digitarEnter(event) {
     // Number 13 is the "Enter" key on the keyboard
     if (event.keyCode === 13) {
       // Cancel the default action, if needed
       event.preventDefault();
       botaoEnviar.click();
     }
-  });
+}
 
 function abrirSidebar() {
     let sidebar = document.querySelector(".sidebar");
     sidebar.classList.remove("hidden");
 }
+
 function fecharSidebar() {
     
     sidebar.classList.add("hidden")
@@ -148,10 +172,12 @@ function buscarParticipantes() {
 function renderizarParticipantes(resposta) {
     let usuarios = document.querySelector(".usuarios");
     participantes = resposta.data;
-    usuarios.innerHTML = "";
+    usuarios.innerHTML = `<p onclick="selecionarUsuarioSidebar(this)"><ion-icon name="person-circle" style="margin-right: 5px;"></ion-icon><span class="username">Todos</span></p>`
     for(let i = 0; i < participantes.length; i++) {
+    
     usuarios.innerHTML += `<p onclick="selecionarUsuarioSidebar(this)"><ion-icon name="person-circle" style="margin-right: 5px;"></ion-icon><span class="username">${participantes[i].name}</span></p>`
     }
+    console.log("atualizou participantes");
 }
 function selecionarUsuarioSidebar(user) {
     

@@ -156,6 +156,8 @@ nav ul li ion-icon {
     margin-top: 30px;
 }
 .participantes ion-icon {
+    width: 24px;
+    height: 24px;
     font-size: 24px;
     color: black;
 }
@@ -166,8 +168,19 @@ nav ul li ion-icon {
 .usuarios p {
     display: flex;
     align-items: center;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 12px;
-
+}
+.usuarios span {
+    width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.usuarios ion-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .visibilidade {
