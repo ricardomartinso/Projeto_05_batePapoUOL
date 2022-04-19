@@ -110,7 +110,7 @@ function enviarMensagemPost() {
             text: inputText.value,
             type: "message"
         }
-    } else if (mensagemUsuario.from === perguntarNome) {
+    } else if (mensagemUsuario.to === perguntarNome) {
         mensagemUsuario = {
             from: perguntarNome,
             to: mensagemUsuario.to,
@@ -161,9 +161,6 @@ function fecharSidebar() {
     
     sidebar.classList.add("hidden")
 }
-
-
-
 
 function buscarParticipantes() {
     let promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
